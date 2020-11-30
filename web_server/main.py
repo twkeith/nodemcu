@@ -47,12 +47,48 @@ def dummy():
 
     return response_template % body
 
-pin = machine.Pin(10, machine.Pin.IN)
+
+pin = machine.Pin(5, machine.Pin.OUT)
+switchten = machine.Pin(10, machine.Pin.IN)
+
+
+def light_on():
+    pin.value(1)
+    body = "You turned a light on!"
+    return response_template % body
+
+
+def light_off():
+    pin.value(0)
+    body = "You turned a light off!"
+    return response_template % body
+
+
+def switch():
+    if switchten.value():
+        body = "The switch is on"
+    else:
+        body = "The switch is off"
+    return response_template % body
+
+
+adc = machine.ADC(0)
+
+
+def light():
+    body = "{value: " + str(adc.read()) + "}"
+    return response_template % body
+
 
 handlers = {
     'time': time,
     'dummy': dummy,
+    'light_on': light_on,
+    'light_off': light_off,
+    'switch': switch,
+    'light': light,
 }
+
 
 def main():
     s = socket.socket()
